@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  nmhtestproject:
+    image: ${DOCKER_REGISTRY-}nmhtestproject
+    build:
+      context: .
+      dockerfile: NMHTestProject/Dockerfile
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=nmhtest
+      - POSTGRES_USER=nmhtest
+      - POSTGRES_PASSWORD=nmhtestpwd

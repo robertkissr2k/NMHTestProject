@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  webapi:
+    image: NMHTestProject:latest 
+    container_name: NMHTestProject
+    ports:
+      - "5000:80"
+    depends_on:
+      - rabbitmq
+      - postgres
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=yourdatabase;Username=yourusername;Password=yourpassword # Nahraďte skutočnými hodnotami
+      - RabbitMQ__HostName=rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=nmhtest
+      - POSTGRES_USER=nmhtest
+      - POSTGRES_PASSWORD=nmhtestpwd
+    
